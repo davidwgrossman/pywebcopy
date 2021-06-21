@@ -33,6 +33,7 @@ Usage::
 import logging
 import os
 from operator import attrgetter
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 
 from .configs import SESSION, config
 from .elements import _ElementFactory, LinkTag, ScriptTag, ImgTag, AnchorTag, TagBase
@@ -212,6 +213,7 @@ class WebPage(Parser, _ElementFactory):
                 i.join(timeout=timeout)
         del self._threads[:]
 
+
     def save_assets(self):
         """Save only the linked files to the disk.
         """
@@ -225,8 +227,12 @@ class WebPage(Parser, _ElementFactory):
 
         LOGGER.log(100, "Queueing download of <%d> asset files." % len(elms))
 
-        for elem in elms:
-                elem.run()
+        with PoolExecutor(max_workers=10) as executor:
+            for _ in executor.map(self.elm_run, elms):
+                print(_)
+
+    def elm_run(self,elm):
+        elm.run()
 
     def save_html(self, file_name=None, raw_html=False):
         """Saves the html of the page to a default or specified file.

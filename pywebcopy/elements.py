@@ -328,16 +328,16 @@ class LinkTag(TagBase):
             # all the linked files will be saved and file paths would be replaced accordingly
             contents = self.replace_urls(req.content, self.repl)
 
-            # log amount of links found
-            LOGGER.info('[%d] CSS linked files are found in file [%s]'
-                        % (len(self._stack), self.file_path))
+        # log amount of links found
+        LOGGER.info('[%d] CSS linked files are found in file [%s]'
+                    % (len(self._stack), self.file_path))
 
-            # Save the content
-            self.write_file(contents)
+        # Save the content
+        self.write_file(contents)
 
-            # Also invoke the files stored in sub-files stack
-            for f in self._stack:
-                f.run()
+        # Also invoke the files stored in sub-files stack
+        for f in self._stack:
+            f.run()
 
 
 class NullTag(TagBase):
