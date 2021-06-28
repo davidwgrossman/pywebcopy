@@ -318,15 +318,15 @@ class LinkTag(TagBase):
             LOGGER.error("URL returned an unknown response: [%s]" % self.url)
             return
 
-            # Try to avoid pulling the contents in the ram
-            # while substituting urls in the contents would NOT
-            # work as expected because the regex won't match
-            # correctly, thus we have to load the whole file
-            # in at once. But will try to minimise the footprint
-            # Extracts urls from `url()` and `@imports` rules in the css file.
-            # the regex matches all those with double mix-match quotes and normal ones
-            # all the linked files will be saved and file paths would be replaced accordingly
-            contents = self.replace_urls(req.content, self.repl)
+        # Try to avoid pulling the contents in the ram
+        # while substituting urls in the contents would NOT
+        # work as expected because the regex won't match
+        # correctly, thus we have to load the whole file
+        # in at once. But will try to minimise the footprint
+        # Extracts urls from `url()` and `@imports` rules in the css file.
+        # the regex matches all those with double mix-match quotes and normal ones
+        # all the linked files will be saved and file paths would be replaced accordingly
+        contents = self.replace_urls(req.content, self.repl)
 
         # log amount of links found
         LOGGER.info('[%d] CSS linked files are found in file [%s]'
