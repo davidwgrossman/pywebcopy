@@ -286,5 +286,9 @@ class WebPage(Parser, _ElementFactory):
         if not self._parseComplete:
             self.parse()  # call in the action
 
-        self.save_assets()
+        try:
+            self.save_assets()
+        except Exception as e:
+            LOGGER.info(e)
+            
         self.save_html(self.utx.file_path, raw_html=False)
